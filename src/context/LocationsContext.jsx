@@ -30,71 +30,88 @@ export const LocationsProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCsv = (url) => {
-      return new Promise((resolve, reject) => {
-        fetch(`${url}?t=${new Date().getTime()}`)
-          .then(response => {
-            if (!response.ok) throw new Error(`Failed to fetch ${url}`);
-            return response.text();
-          })
-          .then(text => {
-            Papa.parse(text, {
-              header: true,
-              skipEmptyLines: true,
-              complete: (results) => resolve(results.data),
-              error: (err) => reject(err)
-            });
-          })
-          .catch(reject);
-      });
-    };
+    const fetchApi = async (url) => {
+
+    console.log("Fetching", url);
+
+    const response = await fetch(`http://127.0.0.1:5001${url}`);
+
+    console.log("Response received", response.status);
+
+    const data = await response.json();
+
+    console.log("Parsed JSON", data);
+
+    return data;
+};
 
     const loadAllData = async () => {
-      try {
-        const [locData, homeData, ecoData] = await Promise.all([
-          fetchCsv('/locations.csv'),
-          fetchCsv('/homestays.csv'),
-          fetchCsv('/eco.csv')
-        ]);
+  try {
+    console.log("Loading locations...");
+    const locData = await fetchApi("/api/locations");
+    console.log("Locations:", locData.length);
 
-        const parsedLocations = locData.map((row, index) => {
-          const id = index + 1;
-          const coords = generateDummyCoordinates(id);
-          return {
-            id: id,
-            name: row['Name of Location'] || `Location ${id}`,
-            category: row['What is the type of attraction ?'] || 'Unknown',
-            landmark: row['Nearest Landmark'] || 'Unknown',
-            village: row['Village name'] || row['Located in'] || 'Unknown',
-            taluka: row['Taluka Name'] || 'Dapoli',
-            district: row['District Name'] || 'Ratnagiri',
-            roadStatus: row['Road condition'] || 'Unknown',
-            signs: row['Signboards available'] || 'Unknown',
-            season: row['Seasonal availability'] || 'Open all year',
-            duration: row['Average time spent (Minutes/Hours)'] || 'Unknown',
-            mediaDriveUrl: row['Upload photo of the location'] || '#',
-            lat: coords.lat,
-            lng: coords.lng
-          };
-        });
+    console.log("Loading homestays...");
+    const homeData = await fetchApi("/api/homestays");
+    console.log("Homestays:", homeData.length);
 
-        const parsedHomestays = homeData.map((row, index) => {
-          const id = index + 100; // Offset IDs to prevent collision if needed
-          const coords = generateDummyCoordinates(id, 2); // Different offset spread
-          return {
-            id: id,
-            name: row['Name of Homestay'] || `Homestay ${id}`,
-            owner: row['Name of the Homestay Owner'] || 'Unknown',
-            phone: row['Phone Number'] || 'Unknown',
-            village: row['Village/Town/City Name'] || 'Unknown',
-            taluka: row['Taluka Name'] || 'Dapoli',
-            type: row['Type of Homestay'] || 'Homestay',
-            amenities: row['Which of the following facilities and services are provided by your homestay?'] || 'Basic',
-            mediaDriveUrl: row['Upload photo of the Homestay'] || '#',
-            lat: coords.lat,
-            lng: coords.lng
-          };
-        });
+    console.log("Loading eco...");
+    const ecoData = await fetchApi("/api/eco");
+    console.log("Eco:", ecoData.length);
+
+
+        const parsedLocations = locData.map((row) => {
+  const coords = generateDummyCoordinates(row.id);
+
+  return {
+    id: row.id,
+    name: row.location_name || `Location ${row.id}`,
+    category: row.attraction_type || "Unknown",
+    landmark: row.nearest_landmark || "Unknown",
+    village: row.village_name || row.located_in || "Unknown",
+    taluka: row.taluka_name || "Unknown",
+    district: row.district_name || "Ratnagiri",
+    roadStatus: row.road_condition || "Unknown",
+    signs: row.signboards_available || "Unknown",
+    season: row.seasonal_availability || "Unknown",
+    duration: row.avg_time_spent || "Unknown",
+    mediaDriveUrl: row.photo_location || "#",
+    lat: coords.lat,
+    lng: coords.lng
+  };
+});
+
+        const parsedHomestays = homeData.map((row) => {
+
+    const coords = generateDummyCoordinates(row.id, 2);
+
+    return {
+
+        id: row.id,
+
+        name: row.homestay_name || `Homestay ${row.id}`,
+
+        owner: row.owner_name || "Unknown",
+
+        phone: row.phone_number || "Unknown",
+
+        village: row.village_town_city || "Unknown",
+
+        taluka: row.taluka_name || "Unknown",
+
+        type: row.homestay_type || "Homestay",
+
+        amenities: row.facilities_services || "Basic",
+
+        mediaDriveUrl: row.photo_homestay || "#",
+
+        lat: coords.lat,
+
+        lng: coords.lng
+
+    };
+
+});
 
         const parsedEco = ecoData.map((row, index) => {
           const id = index + 200;

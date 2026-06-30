@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { TreePine, BedDouble, Droplets, Plus, MapPin, Image as ImageIcon, Crosshair, Trash2, ShieldCheck, Link } from 'lucide-react';
 import { useLocations } from '../context/LocationsContext';
+import RegistrationForm from '../components/forms/RegistrationForm';
 
 // Fix Leaflet's default icon missing issue in webpack/vite
 delete L.Icon.Default.prototype._getIconUrl;
@@ -251,35 +252,11 @@ export default function SustainabilityMap() {
           {activeTab === 'register' && (
             <div className="animate-in slide-in-from-right-4 duration-300">
               <h2 className="text-lg font-bold text-slate-800 mb-4 border-l-4 border-orange-500 pl-3">Register Location / Homestay</h2>
-              <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert("Profile registered to database."); setActiveTab('villages'); }}>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 mb-1">Category Profile Type</label>
-                  <select className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-orange-500">
-                    <option>Tourist Destination / Natural Spot</option>
-                    <option>Homestay Profile</option>
-                    <option>Waste Management Unit</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 mb-1">Name of Location</label>
-                  <input type="text" className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-orange-500" required placeholder="e.g. Unhavare Hot Water Springs" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 mb-1">Located In</label>
-                  <input type="text" className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-orange-500" required placeholder="e.g. Village" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 mb-1">Taluka & Region</label>
-                  <input type="text" className="w-full p-2 border border-slate-300 rounded focus:ring-2 focus:ring-orange-500" required placeholder="e.g. Dapoli" />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 mb-1">Upload Photo</label>
-                  <input type="file" className="w-full text-sm" />
-                </div>
-                <button type="submit" className="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-lg transition-colors">
-                  Submit Profile Data
-                </button>
-              </form>
+              <RegistrationForm
+    onSuccess={() => {
+        setActiveTab("villages");
+    }}
+/>
             </div>
           )}
 

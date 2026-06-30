@@ -1,76 +1,135 @@
 import { NavLink } from 'react-router-dom';
-import { Map, LayoutDashboard, MapPin } from 'lucide-react';
+import { Map, LayoutDashboard, Menu, X, LogIn, LogOut, Shield } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
-export default function Sidebar() {
-  return (
-    <aside className="w-64 bg-slate-900 text-white min-h-screen p-6 fixed">
-      <h2 className="text-xl font-bold mb-8 flex items-center gap-2 text-slate-100 tracking-wide">
-        <Map className="text-blue-400" /> Ratnagiri Explorer
-      </h2>
-      <nav>
-        <ul className="space-y-2">
-          <li>
-            <NavLink
-              to="/dashboard"
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
-                  isActive
-                    ? 'bg-blue-600/20 text-white border-l-4 border-blue-500'
-                    : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                }`
-              }
+export default function Sidebar({ open, setOpen }) {
+
+    const { user, logout } = useAuth();
+
+    return (
+        <>
+            {/* Hamburger Button */}
+            <button
+                onClick={() => setOpen(!open)}
+                className="fixed top-5 left-5 z-50 bg-slate-900 text-white p-3 rounded-lg shadow-lg hover:bg-slate-800 transition"
             >
-              <LayoutDashboard size={20} />
-              Main Dashboard
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/taluka"
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
-                  isActive
-                    ? 'bg-blue-600/20 text-white border-l-4 border-blue-500'
-                    : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                }`
-              }
+                {open ? <X size={24} /> : <Menu size={24} />}
+            </button>
+
+            {/* Sidebar */}
+            <aside
+                className={`fixed top-0 left-0 z-40 h-screen w-64 bg-slate-900 text-white p-6 transform transition-transform duration-300 ${
+                    open ? 'translate-x-0' : '-translate-x-full'
+                }`}
             >
-              <MapPin size={20} />
-              Taluka Database
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/directory"
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
-                  isActive
-                    ? 'bg-blue-600/20 text-white border-l-4 border-blue-500'
-                    : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                }`
-              }
-            >
-              <Map size={20} />
-              Directory Hub
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to="/map"
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
-                  isActive
-                    ? 'bg-emerald-600/20 text-emerald-400 border-l-4 border-emerald-500'
-                    : 'text-slate-400 hover:bg-white/5 hover:text-emerald-400'
-                }`
-              }
-            >
-              <Map size={20} />
-              Interactive Map & Eco
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
-    </aside>
-  );
+
+                <h2 className="text-xl font-bold mb-8 flex items-center gap-2 text-slate-100 tracking-wide mt-14">
+                    <Map className="text-blue-400" />
+                    Ratnagiri Explorer
+                </h2>
+
+                <nav>
+
+                    <ul className="space-y-2">
+
+                        <li>
+
+                            <NavLink
+                                to="/dashboard"
+                                onClick={() => setOpen(false)}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
+                                        isActive
+                                            ? 'bg-blue-600/20 text-white border-l-4 border-blue-500'
+                                            : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                                    }`
+                                }
+                            >
+                                <LayoutDashboard size={20} />
+                                Main Dashboard
+                            </NavLink>
+
+                        </li>
+
+                        <li>
+
+                            <NavLink
+                                to="/map"
+                                onClick={() => setOpen(false)}
+                                className={({ isActive }) =>
+                                    `flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors ${
+                                        isActive
+                                            ? 'bg-emerald-600/20 text-emerald-400 border-l-4 border-emerald-500'
+                                            : 'text-slate-400 hover:bg-white/5 hover:text-emerald-400'
+                                    }`
+                                }
+                            >
+                                <Map size={20} />
+                                Interactive Map
+                            </NavLink>
+
+                        </li>
+
+                        {!user && (
+
+                            <li>
+
+                                <NavLink
+                                    to="/login"
+                                    onClick={() => setOpen(false)}
+                                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-white/5 hover:text-white"
+                                >
+                                    <LogIn size={20} />
+                                    Login
+                                </NavLink>
+
+                            </li>
+
+                        )}
+
+                        {user && (
+
+                            <>
+                                <li>
+
+                                    <NavLink
+                                        to="/admin"
+                                        onClick={() => setOpen(false)}
+                                        className="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-white/5 hover:text-white"
+                                    >
+                                        <Shield size={20} />
+                                        Admin Dashboard
+                                    </NavLink>
+
+                                </li>
+
+                                <li>
+
+                                    <button
+                                        onClick={() => {
+
+                                            logout();
+                                            setOpen(false);
+                                            window.location.href = "/dashboard";
+
+                                        }}
+                                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-white/5 hover:text-white"
+                                    >
+                                        <LogOut size={20} />
+                                        Logout
+                                    </button>
+
+                                </li>
+
+                            </>
+
+                        )}
+
+                    </ul>
+
+                </nav>
+
+            </aside>
+        </>
+    );
 }
