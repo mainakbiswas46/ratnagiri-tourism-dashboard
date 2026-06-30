@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import Papa from 'papaparse';
+import API_BASE_URL from "../config";
 
 const LocationsContext = createContext({
   locations: [],
@@ -34,7 +35,7 @@ export const LocationsProvider = ({ children }) => {
 
     console.log("Fetching", url);
 
-    const response = await fetch(`http://127.0.0.1:5001${url}`);
+    const response = await fetch(`${API_BASE_URL}${url}`);
 
     console.log("Response received", response.status);
 

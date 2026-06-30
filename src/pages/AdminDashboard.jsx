@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { useAuth } from "../context/AuthContext";
+import API_BASE_URL from "../config";
 
 export default function AdminDashboard() {
 
@@ -17,7 +18,7 @@ export default function AdminDashboard() {
         try {
 
             const response = await fetch(
-                `http://127.0.0.1:5001/api/pending_locations/${id}/approve`,
+                `${API_BASE_URL}/api/pending_locations/${id}/approve`,
                 {
                     method: "POST"
                 }
@@ -45,7 +46,7 @@ export default function AdminDashboard() {
     try {
 
         const response = await fetch(
-            `http://127.0.0.1:5001/api/pending_locations/${id}/reject`,
+            `${API_BASE_URL}/api/pending_locations/${id}/reject`,
             {
                 method: "POST"
             }
@@ -74,7 +75,7 @@ const approveHomestay = async (id) => {
     try {
 
         const response = await fetch(
-            `http://127.0.0.1:5001/api/pending_homestays/${id}/approve`,
+            `${API_BASE_URL}/api/pending_homestays/${id}/approve`,
             {
                 method: "POST"
             }
@@ -103,7 +104,7 @@ const rejectHomestay = async (id) => {
     try {
 
         const response = await fetch(
-            `http://127.0.0.1:5001/api/pending_homestays/${id}/reject`,
+            `${API_BASE_URL}/api/pending_homestays/${id}/reject`,
             {
                 method: "POST"
             }
@@ -137,11 +138,11 @@ const rejectHomestay = async (id) => {
             try {
 
                 const locationResponse = await fetch(
-    "http://127.0.0.1:5001/api/pending_locations"
+    `${API_BASE_URL}/api/pending_locations`
 );
 
 const homestayResponse = await fetch(
-    "http://127.0.0.1:5001/api/pending_homestays"
+    `${API_BASE_URL}/api/pending_homestays`
 );
 
 const locationData = await locationResponse.json();

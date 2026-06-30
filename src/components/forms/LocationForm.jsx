@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import API_BASE_URL from "../../config";
 
 export default function LocationForm({ onSuccess }) {
     const [formData, setFormData] = useState({
@@ -69,8 +70,8 @@ const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    const response = await fetch(
-      "http://127.0.0.1:5001/api/locations/register",
+    await fetch(
+    `${API_BASE_URL}/api/locations/register`,
       {
         method: "POST",
         headers: {

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import API_BASE_URL from "../../config";
 
 export default function HomestayForm({ onSuccess }) {
 
@@ -52,8 +53,8 @@ export default function HomestayForm({ onSuccess }) {
 
     try {
 
-        const response = await fetch(
-            "http://127.0.0.1:5001/api/homestays/register",
+        await fetch(
+            `${API_BASE_URL}/api/homestays/register`,
             {
                 method: "POST",
                 headers: {
