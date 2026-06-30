@@ -16,73 +16,68 @@ import CommunityExperience from "./pages/CommunityExperience";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
-import { AuthProvider } from "./context/AuthContext";
 import { LocationsProvider } from "./context/LocationsContext";
 
 export default function App() {
   return (
-    <AuthProvider>
-      <LocationsProvider>
-        <Router>
+    <LocationsProvider>
+      <Router>
+        <Routes>
 
-          <Routes>
+          <Route path="/" element={<Home />} />
 
-            <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
 
-            <Route path="/login" element={<Login />} />
+          <Route element={<DashboardLayout />}>
 
-            <Route element={<DashboardLayout />}>
+            <Route
+              path="/dashboard"
+              element={<DashboardOverview />}
+            />
 
-              <Route
-                path="/dashboard"
-                element={<DashboardOverview />}
-              />
+            <Route
+              path="/profile/:id"
+              element={<LocationProfile />}
+            />
 
-              <Route
-                path="/profile/:id"
-                element={<LocationProfile />}
-              />
+            <Route
+              path="/map"
+              element={<SustainabilityMap />}
+            />
 
-              <Route
-                path="/map"
-                element={<SustainabilityMap />}
-              />
+            <Route
+              path="/nature-walks"
+              element={<NatureWalks />}
+            />
 
-              <Route
-                path="/nature-walks"
-                element={<NatureWalks />}
-              />
+            <Route
+              path="/traditional-food"
+              element={<TraditionalFood />}
+            />
 
-              <Route
-                path="/traditional-food"
-                element={<TraditionalFood />}
-              />
+            <Route
+              path="/cultural-events"
+              element={<CulturalEvents />}
+            />
 
-              <Route
-                path="/cultural-events"
-                element={<CulturalEvents />}
-              />
+            <Route
+              path="/community-experience"
+              element={<CommunityExperience />}
+            />
 
-              <Route
-                path="/community-experience"
-                element={<CommunityExperience />}
-              />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                }
-              />
+          </Route>
 
-            </Route>
-
-          </Routes>
-
-        </Router>
-      </LocationsProvider>
-    </AuthProvider>
+        </Routes>
+      </Router>
+    </LocationsProvider>
   );
 }
