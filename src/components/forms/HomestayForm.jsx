@@ -53,7 +53,7 @@ export default function HomestayForm({ onSuccess }) {
 
     try {
 
-        await fetch(
+        const response = await fetch(
             `${API_BASE_URL}/api/homestays/register`,
             {
                 method: "POST",
@@ -67,17 +67,13 @@ export default function HomestayForm({ onSuccess }) {
         const result = await response.json();
 
         if (!response.ok) {
-
             throw new Error(result.error || "Submission failed");
-
         }
 
         alert(result.message);
 
         if (onSuccess) {
-
             onSuccess();
-
         }
 
         setFormData({
@@ -118,9 +114,9 @@ export default function HomestayForm({ onSuccess }) {
 
         });
 
-    }
+    } catch (err) {
 
-    catch (err) {
+        console.error(err);
 
         alert(err.message);
 
